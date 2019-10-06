@@ -8,7 +8,7 @@ export default class Todolist extends Component {
             <View>
                 {Todolist.map((Todolist, id) => {
                     return (
-                        <Text ke={id} style={style.border}> {Todolist}</Text> 
+                        <Text key={id} style={style.border}> {Todolist}</Text> 
                     )
                 }
 
