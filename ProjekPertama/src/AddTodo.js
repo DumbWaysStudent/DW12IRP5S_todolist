@@ -16,15 +16,19 @@ export default class AddTodo extends Component{
         {id:1, items:'work'},
         {id:2, items:'swim'},
         {id:3, items:'study'},
-        {id:1, items:'sleep'},
-        {id:1, items:'run'}
+        {id:4, items:'sleep'},
+        {id:5, items:'run'}
     ]
     }
 
     handleJoin = () => {
-        this.Todolist.push({items: this.state.input})
-        this.setState({array: [...this.Todolist]})
+        this.Todolist.push({items: this.state.input});
+        this.setState({array: [...this.Todolist]});
         this.textInputRef.clear();
+    }
+    ToRemove (id) {
+        this.Todolist.splice(id, 1);
+        this.setState({array: [...this.Todolist]});
     }
 
     render(){
@@ -46,6 +50,7 @@ export default class AddTodo extends Component{
             renderItem={({ item }) => 
             <View style={style.list}>
             <Text style={style.textList}> {item.items} </Text>
+            <Button title="X" onPress={(id) => this.ToRemove(id)} />
     
             </View>
         }
@@ -60,7 +65,7 @@ const style = StyleSheet.create({
     container: {
         flex:1,
         backgroundColor:'#C0C0C0',
-        margin:2,
+        margin:4,
         padding:4
     },
 
@@ -90,9 +95,11 @@ const style = StyleSheet.create({
 
     list:{
         backgroundColor:'white',
-        borderRadius:3,
+        borderRadius:5,
         margin:6,
-        padding:8
+        padding:8,
+        flexDirection:'row',
+        justifyContent: 'space-between'
     },
 
     textList: {
