@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TextInput, FlatList, Button} from 'react-native';
+import { Text, View, StyleSheet, TextInput, FlatList, Button,TouchableOpacity} from 'react-native';
+import {Icon, CheckBox, ListItem} from 'native-base';
+
 
 export default class AddTodo extends Component{
     constructor(){
@@ -9,34 +11,57 @@ export default class AddTodo extends Component{
         add:'Add',
         text:'New Todo',
         array:[],
-        input:null
+        input:null,
+        Todolist: [
+            {id:1, items:'work'},
+            {id:2, items:'swim'},
+            {id:3, items:'study'},
+            {id:4, items:'sleep'},
+            {id:5, items:'run'}
+        ]
         
     }
-    this.Todolist = [
-        {id:1, items:'work'},
-        {id:2, items:'swim'},
-        {id:3, items:'study'},
-        {id:4, items:'sleep'},
-        {id:5, items:'run'}
-    ]
     }
 
     handleJoin = () => {
-        this.Todolist.push({items: this.state.input});
-        this.setState({array: [...this.Todolist]});
-        this.textInputRef.clear();
+        // this.Todolist.push({items: this.state.input});
+        // this.setState({array: [...this.Todolist]});
+        // this.textInputRef.clear();
+        const data = this.state.Todolist;
+        const dataId = data.length + 1; 
+        const input = {
+            id : dataId,
+            items: this.state.input
+        };
+        data.push(input);
+        this.setState({data:input});
+        this.empty.clear()
+     
     }
-    ToRemove (id) {
-        this.Todolist.splice(id, 1);
-        this.setState({array: [...this.Todolist]});
+    ToRemove = (id) => {
+        // this.Todolist.splice(id, 1);
+        // this.setState({array: [...this.Todolist]});
+      
+        const data = this.state.Todolist;
+        const newData = data.filter(dataref => dataref.id !== id);
+        this.setState({
+            Todolist : newData
+        })
     }
+    // item =({id,items,onDelete}) => {
+    //     return(
+    //         <View style={StyleSheet.list}>
+    //         <Text style={style.items}>{title}</Text>
+    //     </View>
+    //     ) 
+    // }
 
     render(){
         return (
         <View style={style.container}>
             <View style={style.AddInput}>
                 <TextInput autoCorrect={false}
-                ref={ref => this.textInputRef = ref}
+                ref={ref => this.empty = ref}
                 placeholder={this.state.text}
                 style={style.inputStyle} onChangeText={data => this.setState({input:data})}/>
                 <Button title={this.state.add} style={style.addButton} onPress={this.handleJoin}/>
@@ -45,13 +70,14 @@ export default class AddTodo extends Component{
         
         <View>
             <FlatList
-            data={this.Todolist}
+            data={this.state.Todolist}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => 
             <View style={style.list}>
             <Text style={style.textList}> {item.items} </Text>
-            <Button title="X" onPress={(id) => this.ToRemove(id)} />
-    
+           <TouchableOpacity style={style.btndel} onPress = {()=> this.ToRemove(item.id)}>
+           <Icon type="FontAwesome" name="trash" style={style.icon}/>
+           </TouchableOpacity>
             </View>
         }
         />
@@ -95,13 +121,20 @@ const style = StyleSheet.create({
 
     list:{
         backgroundColor:'white',
-        borderRadius:5,
-        margin:6,
-        padding:8,
+        borderRadius:4,
+        margin:4,
+        padding:4,
         flexDirection:'row',
         justifyContent: 'space-between'
     },
 
+    btndel:{
+        backgroundColor : '#808080',
+        borderRadius : 10,
+        height : 40,
+        alignItems : 'center',
+        padding : 8,  
+    },
     textList: {
         fontSize: 16
     }
